@@ -39,10 +39,12 @@ struct compte_t* creer_compte(char* nom, char* mdp){
   return compte;
 }
 int main(void){
+  struct compte_t* compte = creer_compte("toto", "abc");
   //nous lanceons la socket client et le connectons au serveur
   CreerSocket("127.0.0.1", 8080);
   //commande provisoire pour ouvrir fenêtre avec messages
   system("gnome-terminal");
   //tuyau qui doit être lancé pour la comm aficheur client
+  deconnecter(compte);
   return 0;
 }

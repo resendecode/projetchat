@@ -7,7 +7,7 @@ struct compte_t{
     char* mdp;
 };
 int connecter (struct compte_t* compte);
-int deconnecter();
+int deconnecter(struct compte_t* compte);
 void afficher_liste_utilisateurs();
 struct compte_t *creer_compte(char* nom, char* mdp);
 int supprimer_compte(struct compte_t* compte);

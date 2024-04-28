@@ -22,13 +22,44 @@ int traiter(int sock) {
   memset(reponse,0,sizeof(reponse)); // Vide la variable reponse
   recv(sock, reponse, 200, 0);
   printf("%s\n", reponse);
-
   return 1;
 }
 
 int main(void){
   //TODO: lancer autres processus, creer segment mémoire partagé, créer file méssages, fermer correctement à la fin
-  //creation despace mémoire
+  pid_t commu, gestion, rmi;
+  commu = fork();
+  if (commu<0){
+    perror("fork");
+    abort();
+  }
+  else if(commu ==0){
+    printf("commu! \n");
+    exit(0);
+  }
+  else{
+    gestion = fork();
+    if (gestion<0){
+      perror("fork");
+      abort();
+    }
+    else if(gestion ==0){
+      printf("gestion! \n");
+      exit(0);
+    }
+    else{
+      rmi = fork();
+      if (rmi<0){
+        perror("fork");
+        abort();
+      }
+      else if(rmi ==0){
+        printf("rmi! \n");
+        exit(0);
+      }
+    }
+  }
+  
   char* adr1;
   int shmid, cle = 5;
     //ne pas oublier ipc_creat
@@ -46,5 +77,9 @@ int main(void){
       exit(1);
     }
     //ne pas faire de shmctl car le segmnt est déjà supprimé dans le fils
+    int status_commu, status_gest, status_rmi;
+  waitpid(commu,&status_commu, WNOHANG);
+  waitpid(gestion,&status_gest, WNOHANG);
+  waitpid(rmi,&status_rmi, WNOHANG);
   return 0;
 }
