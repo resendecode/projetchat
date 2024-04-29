@@ -1,3 +1,4 @@
+#include "./central.h"
 #include <stdlib.h>
 #include <errno.h>
 #include <stdio.h>
@@ -8,6 +9,8 @@
 #include <signal.h>
 #include <unistd.h>
 #include <arpa/inet.h>
+#include <sys/stat.h>
+
 int traiter(int sock) {
   char reponse[200];
   char message[1];
@@ -27,34 +30,39 @@ int traiter(int sock) {
 
 int main(void){
   //TODO: lancer autres processus, creer segment mémoire partagé, créer file méssages, fermer correctement à la fin
-  pid_t commu, gestion, rmi;
-  commu = fork();
-  if (commu<0){
+
+  printf("le make a marché \n");
+  pid_t commu_pid, gesti_pid, rmi_pid;
+  commu_pid = fork();
+  if (commu_pid<0){
     perror("fork");
     abort();
   }
-  else if(commu ==0){
+  else if(commu_pid ==0){
     printf("commu! \n");
+    communication();
     exit(0);
   }
   else{
-    gestion = fork();
-    if (gestion<0){
+    gesti_pid = fork();
+    if (gesti_pid<0){
       perror("fork");
       abort();
     }
-    else if(gestion ==0){
+    else if(gesti_pid ==0){
       printf("gestion! \n");
+      gestion();
       exit(0);
     }
     else{
-      rmi = fork();
-      if (rmi<0){
+      rmi_pid = fork();
+      if (rmi_pid<0){
         perror("fork");
         abort();
       }
-      else if(rmi ==0){
+      else if(rmi_pid ==0){
         printf("rmi! \n");
+        rmi();
         exit(0);
       }
     }
@@ -78,8 +86,8 @@ int main(void){
     }
     //ne pas faire de shmctl car le segmnt est déjà supprimé dans le fils
     int status_commu, status_gest, status_rmi;
-  waitpid(commu,&status_commu, WNOHANG);
-  waitpid(gestion,&status_gest, WNOHANG);
-  waitpid(rmi,&status_rmi, WNOHANG);
+  waitpid(commu_pid,&status_commu, WNOHANG);
+  waitpid(gesti_pid,&status_gest, WNOHANG);
+  waitpid(rmi_pid,&status_rmi, WNOHANG);
   return 0;
 }

@@ -7,7 +7,7 @@
 #include <sys/socket.h>
 #include <netdb.h>
 #import <arpa/inet.h>
-
+#include <sys/stat.h>
 int CreerSocket(char* addr, int port) {
   // adresse de la socket coté serveur
   static struct sockaddr_in addr_serveur;
@@ -40,6 +40,9 @@ struct compte_t* creer_compte(char* nom, char* mdp){
 }
 int main(void){
   struct compte_t* compte = creer_compte("toto", "abc");
+  mkfifo("pipes/vers_aff", 0666); // Pipe communication à la fenêtre d'affichage
+  mkfifo("pipes/vers_cli", 0666); // Pipe de retour
+
   //nous lanceons la socket client et le connectons au serveur
   CreerSocket("127.0.0.1", 8080);
   //commande provisoire pour ouvrir fenêtre avec messages
