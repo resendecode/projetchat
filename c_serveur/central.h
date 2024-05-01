@@ -4,11 +4,17 @@
 
 #ifndef PROJETCHAT_CENTRAL_H
 #define PROJETCHAT_CENTRAL_H
-struct compte_t{
+typedef struct {
     char* nom;
     char* mdp;
-};
+} compte_t;
+enum requete_enum{connexion,deconnexion,creation,suppression,liste,message};
+typedef struct{
+    enum requete_enum req;
+    char* contenu;
+} message_t;
 int communication();
+void *gere_client(void *arg);
 int gestion();
 int rmi();
 

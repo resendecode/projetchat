@@ -11,23 +11,6 @@
 #include <arpa/inet.h>
 #include <sys/stat.h>
 
-int traiter(int sock) {
-  char reponse[200];
-  char message[1];
-  // la connexion est établie, on attend les données envoyées par le client
-  read(sock, reponse, 200);
-  // affichage du message reçu
-  printf("%s\n", reponse);
-  scanf("%s", message);
-  // écrit la demande
-  send(sock,message, strlen(message)+1, 0);
-  // lit la réponse
-  memset(reponse,0,sizeof(reponse)); // Vide la variable reponse
-  recv(sock, reponse, 200, 0);
-  printf("%s\n", reponse);
-  return 1;
-}
-
 int main(void){
   //TODO: lancer autres processus, creer segment mémoire partagé, créer file méssages, fermer correctement à la fin
 
@@ -86,8 +69,10 @@ int main(void){
     }
     //ne pas faire de shmctl car le segmnt est déjà supprimé dans le fils
     int status_commu, status_gest, status_rmi;
-  waitpid(commu_pid,&status_commu, WNOHANG);
-  waitpid(gesti_pid,&status_gest, WNOHANG);
-  waitpid(rmi_pid,&status_rmi, WNOHANG);
+    //ne pas faire "no hang" dans le waitpid car cela empêche le serveur de marcher correctement
+    //TODO: solution provisoire pour l'attente de la fin des 3 processus
+    wait(NULL);
+  wait(NULL);
+  wait(NULL);
   return 0;
 }
