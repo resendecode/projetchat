@@ -57,10 +57,10 @@ int connection(int sock){
     // Send message to server
     send(sock, message, strlen(message), 0);
     printf("Message sent to server: %s\n", message);
-    memset(buffer,0, sizeof(buffer) );
-    int nbytes = read(sock, buffer, strlen(buffer));
+    memset(buffer,0, MAX_BUFFER_SIZE );
+    int nbytes = read(sock, buffer, MAX_BUFFER_SIZE);
     buffer[nbytes] = '\0';
-    printf("message reçu: %s and length: %d", buffer, strlen(buffer));
+    printf("message reçu: %s and length: %d", buffer, MAX_BUFFER_SIZE);
   }while(strcmp(message,"q") !=0);
   return 0;
 }
