@@ -6,19 +6,17 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #include <pthread.h>
-
+#define MAX_BUFFER_SIZE 200
 #define PORT 7777
 void *gere_client(void* arg){
   int new_socket = *((int *)arg);
   char buffer [200] = {0};
-  char* hello = "Hello from server";
+  char hello[] = "Hello from server";
   do {
-    read(new_socket, buffer,
-                   sizeof(char[200]));
+    read(new_socket, buffer,MAX_BUFFER_SIZE);
     printf("%s\n", buffer);
-    memset(buffer, 0, sizeof(buffer));
-    send(new_socket, hello, strlen(hello), 0);
-
+    send(new_socket, buffer, MAX_BUFFER_SIZE, 0);
+    memset(buffer, 0, MAX_BUFFER_SIZE);
   }while(strcmp(buffer, "q") != 0);
   // closing the connected socket
   close(new_socket);
