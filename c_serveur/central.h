@@ -9,15 +9,13 @@ typedef struct {
     char* mdp;
 } compte_t;
 enum requete_enum{connexion,deconnexion,creation,suppression,liste,message};
-typedef struct{
-    enum requete_enum req;
-    char* contenu;
-} message_t;
+
 typedef struct{
     int sock;
     int cg[2];
     int gc[2];
 }args_t;
+int connectionUdp();
 int communication(int cg[2], int gc[2]);
 void *gere_client(void *arg);
 int gestion(int cg[2], int gc[2]);

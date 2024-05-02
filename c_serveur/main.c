@@ -12,7 +12,6 @@
 #include <sys/stat.h>
 
 int main(void){
-  //TODO: lancer autres processus, creer segment mémoire partagé, créer file méssages, fermer correctement à la fin
   int cg[2]; //pipe communication =>gestion
   int gc[2]; //pipe gestion => communication
   if(pipe(cg) == -1) return 1;
@@ -74,7 +73,7 @@ int main(void){
     //ne pas faire de shmctl car le segmnt est déjà supprimé dans le fils
     int status_commu, status_gest, status_rmi;
     //ne pas faire "no hang" dans le waitpid car cela empêche le serveur de marcher correctement
-    //TODO: solution provisoire pour l'attente de la fin des 3 processus
+    //solution provisoire pour l'attente de la fin des 3 processus
     wait(NULL);
   wait(NULL);
   wait(NULL);

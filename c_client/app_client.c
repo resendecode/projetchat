@@ -52,9 +52,7 @@ int connection(int sock){
            "q: quitter l'application \n-");
     fgets(message, MAX_BUFFER_SIZE, stdin);
     //enlève le final du string saisi
-    // Remove newline character from fgets
     message[strcspn(message, "\n")] = '\0';
-    // Send message to server
     send(sock, message, strlen(message), 0);
     printf("Message sent to server: %s\n", message);
     memset(buffer,0, MAX_BUFFER_SIZE );

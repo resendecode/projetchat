@@ -23,7 +23,6 @@ void *gere_client(void* arg){
     memset(buffer, 0, MAX_BUFFER_SIZE);
     memset(pip, 0, MAX_BUFFER_SIZE);
   }while(strcmp(buffer, "q") != 0);
-  // closing the connected socket
   close(new_socket);
 }
 int communication(int cg[2], int gc[2]){
@@ -33,12 +32,11 @@ int communication(int cg[2], int gc[2]){
   opt = 1;
   struct sockaddr_in address;
   socklen_t addrlen = sizeof(address);
-  // Creating socket file descriptor
   if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
     perror("socket failed");
     exit(EXIT_FAILURE);
   }
-// Set socket options to allow multiple connections
+  //permettre la reutilisation de la socket service
   if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT,
                  &opt, sizeof(opt))) {
     perror("setsockopt");
@@ -47,7 +45,6 @@ int communication(int cg[2], int gc[2]){
   address.sin_family = AF_INET;
   address.sin_addr.s_addr = INADDR_ANY;
   address.sin_port = htons(PORT);
-
   if (bind(server_fd, (struct sockaddr*)&address,
            sizeof(address))
       < 0) {
@@ -76,11 +73,9 @@ int communication(int cg[2], int gc[2]){
         perror("pthread_create");
         close(new_socket);
       }
-      // Detach the thread to avoid memory leaks
+      // Detacher le thread
       pthread_detach(tid);
     }
-
-  // closing the listening socket
   close(server_fd);
   return 0;
 }
