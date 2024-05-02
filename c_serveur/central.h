@@ -13,9 +13,9 @@ typedef struct{
     enum requete_enum req;
     char* contenu;
 } message_t;
-int communication();
+int communication(int cg[2], int gc[2]);
 void *gere_client(void *arg);
-int gestion();
+int gestion(int cg[2], int gc[2]);
 int rmi();
 
 int rediff(); //rediffusion d'un message vers tous les clients

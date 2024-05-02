@@ -13,6 +13,10 @@
 
 int main(void){
   //TODO: lancer autres processus, creer segment mémoire partagé, créer file méssages, fermer correctement à la fin
+  int cg[2]; //pipe communication =>gestion
+  int gc[2]; //pipe gestion => communication
+  if(pipe(cg) == -1) return 1;
+  if(pipe(gc)== -1) return 1;
 
   printf("le make a marché \n");
   pid_t commu_pid, gesti_pid, rmi_pid;
@@ -23,7 +27,7 @@ int main(void){
   }
   else if(commu_pid ==0){
     printf("commu! \n");
-    communication();
+    communication(cg,gc);
     exit(0);
   }
   else{
@@ -34,7 +38,7 @@ int main(void){
     }
     else if(gesti_pid ==0){
       printf("gestion! \n");
-      gestion();
+      gestion(cg,gc);
       exit(0);
     }
     else{
