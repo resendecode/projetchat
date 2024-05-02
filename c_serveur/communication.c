@@ -21,8 +21,12 @@ void *gere_client(void* arg){
   // closing the connected socket
   close(new_socket);
 }
-int communication(){
+int communication(int cg[2], int gc[2]){
   int server_fd, new_socket, opt;
+  char pip[MAX_BUFFER_SIZE];
+  write(cg[1],"Saluuuut",MAX_BUFFER_SIZE);
+  read(gc[0],&pip,MAX_BUFFER_SIZE);
+  printf("%s",pip);
   pthread_t tid;
   opt = 1;
   struct sockaddr_in address;
