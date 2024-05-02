@@ -9,11 +9,16 @@
 #define MAX_BUFFER_SIZE 200
 #define PORT 7777
 void *gere_client(void* arg){
-  int new_socket = *((int *)arg);
-  char buffer [200] = {0};
-  char hello[] = "Hello from server";
+  args_t args = *((args_t *) arg);
+  int new_socket = args.sock;
+  char buffer [MAX_BUFFER_SIZE] = {0};
+  char pip[MAX_BUFFER_SIZE] = {0};
   do {
     read(new_socket, buffer,MAX_BUFFER_SIZE);
+    write(args.cg[1],"Saluuuut\n",MAX_BUFFER_SIZE);
+    //traitement de gestion...
+    read(args.gc[0],&pip,MAX_BUFFER_SIZE);
+    printf("%s",pip);
     printf("%s\n", buffer);
     send(new_socket, buffer, MAX_BUFFER_SIZE, 0);
     memset(buffer, 0, MAX_BUFFER_SIZE);
@@ -23,10 +28,7 @@ void *gere_client(void* arg){
 }
 int communication(int cg[2], int gc[2]){
   int server_fd, new_socket, opt;
-  char pip[MAX_BUFFER_SIZE];
-  write(cg[1],"Saluuuut",MAX_BUFFER_SIZE);
-  read(gc[0],&pip,MAX_BUFFER_SIZE);
-  printf("%s",pip);
+  args_t args;
   pthread_t tid;
   opt = 1;
   struct sockaddr_in address;
@@ -65,7 +67,12 @@ int communication(int cg[2], int gc[2]){
         exit(EXIT_FAILURE);
       }
       // Create a new thread to handle the client
-      if (pthread_create(&tid, NULL,gere_client, &new_socket) != 0) {
+      args.sock = new_socket;
+      args.cg[0] = cg[0];
+      args.cg[1] = cg[1];
+      args.gc[0] = gc[0];
+      args.gc[1] = gc[1];
+      if (pthread_create(&tid, NULL,gere_client, &args) != 0) {
         perror("pthread_create");
         close(new_socket);
       }
