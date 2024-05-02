@@ -54,13 +54,14 @@ int connection(int sock){
     //enlève le final du string saisi
     // Remove newline character from fgets
     message[strcspn(message, "\n")] = '\0';
-
     // Send message to server
     send(sock, message, strlen(message), 0);
     printf("Message sent to server: %s\n", message);
-
+    memset(buffer,0, sizeof(buffer) );
+    int nbytes = read(sock, buffer, strlen(buffer));
+    buffer[nbytes] = '\0';
+    printf("message reçu: %s and length: %d", buffer, strlen(buffer));
   }while(strcmp(message,"q") !=0);
-
   return 0;
 }
 compte_t* creer_compte(char* nom, char* mdp){

@@ -16,8 +16,8 @@ void *gere_client(void* arg){
     read(new_socket, buffer,
                    sizeof(char[200]));
     printf("%s\n", buffer);
+    memset(buffer, 0, sizeof(buffer));
     send(new_socket, hello, strlen(hello), 0);
-    printf("Hello message sent\n");
 
   }while(strcmp(buffer, "q") != 0);
   // closing the connected socket
