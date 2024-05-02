@@ -15,13 +15,13 @@ void *gere_client(void* arg){
   char pip[MAX_BUFFER_SIZE] = {0};
   do {
     read(new_socket, buffer,MAX_BUFFER_SIZE);
-    write(args.cg[1],"Saluuuut\n",MAX_BUFFER_SIZE);
+    write(args.cg[1],buffer,MAX_BUFFER_SIZE);
     //traitement de gestion...
     read(args.gc[0],&pip,MAX_BUFFER_SIZE);
-    printf("%s",pip);
+    send(new_socket, pip,MAX_BUFFER_SIZE, 0);
     printf("%s\n", buffer);
-    send(new_socket, buffer, MAX_BUFFER_SIZE, 0);
     memset(buffer, 0, MAX_BUFFER_SIZE);
+    memset(pip, 0, MAX_BUFFER_SIZE);
   }while(strcmp(buffer, "q") != 0);
   // closing the connected socket
   close(new_socket);
